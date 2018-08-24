@@ -11,28 +11,32 @@ import WebKit
 
 class ViewController: UIViewController
 {
-    var webView: WKWebView!
+    var masterView: UIView!
+    var topPadding: CGFloat = 0
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
     }
-    
+
     override func viewDidAppear(_ animated: Bool)
     {
-        webView = WKWebView()
-        webView.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 11, *) {
+            let window = UIApplication.shared.keyWindow
+            topPadding = window!.safeAreaInsets.top
+        }
         
-        let webUrl = URL(string: "https://www.google.co.jp/")!
-        let myRequest = URLRequest(url: webUrl)
-        webView.load(myRequest)
+        let webView = MyWebView()
+        masterView = webView.cleateView()
+        masterView.translatesAutoresizingMaskIntoConstraints = false
+
+        super.view.addSubview(masterView)
         
-        super.view.addSubview(webView)
-        
-        webView.topAnchor.constraint(equalTo: super.view.topAnchor).isActive = true
-        webView.heightAnchor.constraint(equalTo: super.view.heightAnchor).isActive = true
-        webView.leftAnchor.constraint(equalTo: super.view.leftAnchor).isActive = true
-        webView.widthAnchor.constraint(equalTo: super.view.widthAnchor).isActive = true
+        let guide = super.view.safeAreaLayoutGuide
+        masterView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
+        masterView.heightAnchor.constraint(equalTo: guide.heightAnchor).isActive = true
+        masterView.leftAnchor.constraint(equalTo: guide.leftAnchor).isActive = true
+        masterView.widthAnchor.constraint(equalTo: guide.widthAnchor).isActive = true
     }
 
     override func didReceiveMemoryWarning()
